@@ -1,0 +1,44 @@
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <h1 class="title">Job Posts</h1>
+  </div>
+</section>
+
+<section class="section" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+  (scrolled)="scrollHandler()">
+  <div *ngFor="let job of jobposts">
+    <div class="card">
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-128x128">
+              <img [src]="job.imageUrl" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">{{job.title}}</p>
+            <p class="subtitle is-6">Created on: {{job.createdDate.toDate() | date:'dd-MM-yyyy'}}</p>
+            <p>
+              {{job.description}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <p class="card-footer-item">
+          <span>
+            <button class="button is-danger">Delete</button>
+          </span>
+        </p>
+        <p class="card-footer-item">
+          <span>
+            <button class="button is-warning" (click)="editJobPost(job)">Edit </button>
+          </span>
+        </p>
+      </footer>
+    </div>
+    <br />
+  </div>
+
+
+</section>

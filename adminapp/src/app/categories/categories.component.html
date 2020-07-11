@@ -1,0 +1,39 @@
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <h1 class="title">Categories</h1>
+  </div>
+</section>
+
+
+<section class="section" style="height: 100%;">
+  <div class="container">
+    <mat-list>
+      <mat-list-item *ngFor="let cat of categories">
+        <h3 mat-line>{{cat.displayName}} </h3>
+        <p mat-line>
+          <span> Tag name (internal): {{cat.tagName}} </span>
+        </p>
+        <button mat-icon-button >
+          <mat-icon class="mat-24">delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <!-- <form (ngSubmit)="submitForm()" #jobPostForm="ngForm">
+      <div class="field">
+        <label class="label">Job Title</label>
+        <input type="text" name="title" class="input" [(ngModel)]="title" #titleInput="ngModel" required />
+        <div class="help is-error" *ngIf="titleInput.invalid && titleInput.touched">
+          Title is required
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <input type="text" name="description" class="input" [(ngModel)]="description" #descInput="ngModel" required />
+        <div class="help is-error" *ngIf="descInput.invalid && descInput.touched">
+          Description is required
+        </div>
+      </div>
+    </form> -->
+
+  </div>
+</section>

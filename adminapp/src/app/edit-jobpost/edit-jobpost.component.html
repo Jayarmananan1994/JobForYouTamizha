@@ -1,0 +1,9 @@
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Edit Job Post!</h1>
+    </div>
+  </div>
+</section>
+
+<app-jobpost-editor *ngIf="jobpost!=null" [documentId]="jobpost.id" [jobPost]="jobpost" (onComplete)="onFormComplete($event)" ></app-jobpost-editor>

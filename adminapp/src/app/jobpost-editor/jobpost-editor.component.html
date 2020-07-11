@@ -1,0 +1,126 @@
+<section class="section">
+  <div class="container">
+    <form (ngSubmit)="submitForm()" #jobPostForm="ngForm">
+      <div class="field">
+        <label class="label">Job Title</label>
+        <input type="text" name="title" class="input" [(ngModel)]="title" #titleInput="ngModel" required />
+        <div class="help is-error" *ngIf="titleInput.invalid && titleInput.touched">
+          Title is required
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <input type="text" name="description" class="input" [(ngModel)]="description" #descInput="ngModel" required />
+        <div class="help is-error" *ngIf="descInput.invalid && descInput.touched">
+          Description is required
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Post Content</label>
+        <textarea type="text" name="content" class="textarea" [(ngModel)]="jobContent" #contentInput="ngModel"
+          required></textarea>
+        <div class="help is-error" *ngIf="contentInput.invalid && contentInput.touched">
+          Job Content is required
+        </div>
+      </div>
+      <div>
+        <label class="label">Last Date</label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="lastDate" name="lastDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </div>
+      <div class="field">
+        <label class="label">Job Type</label>
+        <div class="control">
+          <label class="radio">
+            <input type="radio" name="jobtype" [(ngModel)]="jobType" value="govt" (change)="onItemChange('govt')">
+            Government Job
+          </label>
+          <label class="radio">
+            <input type="radio" name="jobtype" [(ngModel)]="jobType" value="pvt" (change)="onItemChange('pvt')">
+            Private Job
+          </label>
+        </div>
+      </div>
+      <diV class="field">
+        <label class="label">Cover Image</label>
+        <figure *ngIf="jobPost!=null && jobPost.imageUrl!=null" class="image is-128x128">
+          <img [src]="jobPost.imageUrl">
+        </figure>
+        <div class="file has-name is-medium">
+          <label class="file-label">
+            <input class="file-input" type="file" name="resume"
+              (change)="handleFileInput($event.target.files, 'coverImage')">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Choose a file…
+              </span>
+            </span>
+            <span class="file-name">
+              {{(coverImage!=null) ? coverImage.name : 'No File Selected'}}
+            </span>
+          </label>
+        </div>
+      </diV>
+      <div class="field">
+        <label class="label">Attachments</label>
+        <div class="tags are-medium" *ngIf="jobPost!=null">
+          <span class="tag" *ngFor="let att of jobPost.attachments">{{att.fileName}}
+            <button type="button" class="delete is-small" (click)="removeAttachment(att)"></button></span>
+        </div>
+        <div class="tags are-medium">
+          <span class="tag" *ngFor="let att of attachmentsToBeAdded">{{att.name}} <button type="button"
+              class="delete is-small" (click)="removeAttachmentFromTempList(att)"></button></span>
+        </div>
+        <div class="file has-name is-medium">
+          <label class="file-label">
+            <input class="file-input" type="file" name="resume"
+              (change)="handleFileInput($event.target.files, 'attachment')">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Choose a file…
+              </span>
+            </span>
+            <span class="file-name">
+              {{(attachmentToUpload!=null) ? attachmentToUpload.name : 'No File Selected'}}
+            </span>
+          </label>
+          <button type="button" (click)="addtoTempAttachmentList()" [disabled]="attachmentToUpload==null"> Add
+            attachment</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Categories</label>
+        <div class="tags are-medium">
+          <span class="tag" *ngFor="let tag of tags">{{tag}} <button type="button" class="delete is-small"
+              (click)="removeTag(tag)"></button></span>
+        </div>
+        <div class="tags are-medium">
+          <span class="tag" *ngFor="let tag of categoriesSelected">{{tag.displayName}} <button type="button"
+              class="delete is-small" (click)="removeFromSelectedTag(tag)"></button></span>
+        </div>
+        <select name="contactMethod" id="contactMethod" class="form-control" [(ngModel)]="categorySelected">
+          <option *ngFor="let cat of categoriesOptions" [ngValue]="cat">{{ cat.displayName }}</option>
+        </select>
+        <button type="button" class="button is-small" (click)="addToTempCategory()">Add Category</button>
+
+      </div>
+      <button type="submit" class="button is-large is-warning"
+        [disabled]="jobPostForm.invalid || (jobPost && jobPost.imageUrl==null && coverImage==null)">Submit</button>
+    </form>
+  </div>
+</section>
+<div class="overlay" *ngIf="isLoading" >
+  <div class="center">
+      <mat-progress-spinner diameter=50
+                          mode="indeterminate"
+                color="accent">
+    </mat-progress-spinner>
+  </div>
+  </div>

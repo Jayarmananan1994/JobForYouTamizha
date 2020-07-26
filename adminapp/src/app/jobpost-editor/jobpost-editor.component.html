@@ -91,7 +91,9 @@
               {{(attachmentToUpload!=null) ? attachmentToUpload.name : 'No File Selected'}}
             </span>
           </label>
-          <button type="button" (click)="addtoTempAttachmentList()" [disabled]="attachmentToUpload==null"> Add
+        </div>
+        <div style="padding-top: 10px;">
+          <button type="button" class="button is-small" (click)="addtoTempAttachmentList()" [disabled]="attachmentToUpload==null"> Add
             attachment</button>
         </div>
       </div>

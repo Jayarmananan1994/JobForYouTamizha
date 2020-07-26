@@ -3,6 +3,9 @@ import { FirebaseopsService } from '../firebaseops.service';
 import { JobPost } from '../models/jobpost.model';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from '../dialog/ConfirmDialog';
+import { GeneralDialog } from '../dialog/general-dialog';
 
 @Component({
   selector: 'app-home',
@@ -15,22 +18,16 @@ export class HomeComponent implements OnInit {
   jobposts: JobPost[];
   firstJobPost: JobPost;
   lastJobPost: JobPost;
+  isLoading: boolean = false;
 
   //cards = [1,2,3,4,5,6,7,8]
 
-  constructor(private firebaseOps: FirebaseopsService, private router: Router) {
+  constructor(private firebaseOps: FirebaseopsService, private router: Router, private dialog: MatDialog) {
 
   }
 
   ngOnInit(): void {
-    // this.firebaseOps.getInitialJobPosts().valueChanges().subscribe(val => {
-    //   console.log(val);
-    //   this.jobposts = val;
-    //   this.lastJobPost = val[val.length - 1];
-    // });
-    // this.firebaseOps.getInitialJobPosts().snapshotChanges().pipe(map(actions => {
 
-    // }))
     this.firebaseOps.getInitialJobPosts().snapshotChanges().pipe(
       map(actions => {
         return actions.map(this.documentToJobPost);
@@ -39,6 +36,16 @@ export class HomeComponent implements OnInit {
         this.lastJobPost = val[val.length - 1];
       })
 
+  }
+
+  loadInitialPost(){
+    this.firebaseOps.getInitialJobPosts().snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(this.documentToJobPost);
+      })).subscribe(val => {
+        this.jobposts = val;
+        this.lastJobPost = val[val.length - 1];
+      });
   }
 
   onFormComplete(obj) {
@@ -70,6 +77,24 @@ export class HomeComponent implements OnInit {
   editJobPost(jobPost) {
     this.router.navigate(['editpost'], {
       state: { 'jobToEdit': jobPost }
+    });
+  }
+
+   deleteJobPost(jobPost) {
+    console.log(jobPost);
+    const dialogRef = this.dialog.open(ConfirmDialog, { data: "Are you sure you want to delete the post?"});
+
+    dialogRef.afterClosed().subscribe(result=> {
+      console.log(result);
+      if(result){
+        this.isLoading = true;
+         this.firebaseOps.deleteJobPost(jobPost).then(()=>{
+            this.isLoading = false;
+            this.loadInitialPost();
+            this.dialog.open(GeneralDialog, {data: "Post deleted successfully"});
+
+         })
+      }
     });
   }
 

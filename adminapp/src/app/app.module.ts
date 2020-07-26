@@ -10,7 +10,6 @@ import { AngularFireModule } from "@angular/fire";
 import { JobpostEditorComponent } from './jobpost-editor/jobpost-editor.component';
 import { FirebaseopsService } from './firebaseops.service';
 import { RouterModule } from '@angular/router';
-import { AddJobpostComponent } from './add-jobpost/add-jobpost.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -29,6 +28,8 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CategoriesComponent } from './categories/categories.component';
+import { StudymaterialComponent } from './studymaterial/studymaterial.component';
+import { ConfirmDialog } from './dialog/ConfirmDialog';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,9 @@ import { CategoriesComponent } from './categories/categories.component';
     ScrollableDirective,
     EditJobpostComponent,
     GeneralDialog,
-    CategoriesComponent
+    ConfirmDialog,
+    CategoriesComponent,
+    StudymaterialComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +65,8 @@ import { CategoriesComponent } from './categories/categories.component';
       { path: '', component: HomeComponent },
       { path: 'addpost', component: NewpostComponent },
       { path: 'editpost', component: EditJobpostComponent},
-      { path: 'categories', component: CategoriesComponent}
+      { path: 'categories', component: CategoriesComponent},
+      {path: 'study-materials', component: StudymaterialComponent}
     ]),
     BrowserAnimationsModule,
     InfiniteScrollModule

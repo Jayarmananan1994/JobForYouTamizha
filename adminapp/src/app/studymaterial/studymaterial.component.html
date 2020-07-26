@@ -1,0 +1,56 @@
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Study Materials</h1>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <diV class="field">
+      <label class="label">Cover Image</label>
+      <div class="file has-name is-medium">
+        <label class="file-label">
+          <input class="file-input" type="file" name="resume" (change)="handleFileInput($event.target.files)">
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label">
+              Choose a file…
+            </span>
+          </span>
+          <span class="file-name">
+            {{(fileSelected!=null) ? fileSelected.name : 'No File Selected'}}
+          </span>
+        </label>
+        <div style="width: 20px;"></div>
+        <button type="button" (click)="uploadDocument()" [disabled]="fileSelected==null"> Upload Document</button>
+      </div>
+    </diV>
+  </div>
+</section>
+<section  class="section">
+  <div class="container" *ngIf="studyMaterialList!=null">
+    <mat-nav-list>
+      <mat-list-item  *ngFor="let item of studyMaterialList | async">
+         <span matLine>{{ item.fileName }}</span>
+         <button mat-icon-button>
+          <mat-icon> delete</mat-icon>
+       </button>
+         <button mat-icon-button>
+            <mat-icon>info</mat-icon>
+         </button>
+
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
+</section>
+<div class="overlay" *ngIf="isLoading" >
+  <div class="center">
+      <mat-progress-spinner diameter=50
+                          mode="indeterminate"
+                color="accent">
+    </mat-progress-spinner>
+  </div>
+  </div>

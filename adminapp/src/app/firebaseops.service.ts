@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection,
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { firestore } from 'firebase';
 import { Observable, from, Subscription, Subject, pipe } from 'rxjs';
-import { JobPost } from './models/jobpost.model';
+import { JobPost, Attachment } from './models/jobpost.model';
 import { Category } from './models/category.model';
 import { finalize } from 'rxjs/operators';
 import { switchMap } from 'rxjs/operators';
@@ -32,11 +32,34 @@ export class FirebaseopsService {
     return this.firestore.collection("jobposts").add(jobpost);
   }
 
+  addCategory(category: Category): Promise<void> {
+    var obj = { 'display-name': category.displayName, 'tag-short-hand': category.tagName }
+    var keyName = category.displayName.toLowerCase().replace(" ", "");
+    return this.firestore.collection('categories').doc(keyName).set(obj);
+  }
+
+  deleteCategory(categoryName: string): Promise<void> {
+    var keyName = categoryName.toLowerCase().replace(" ", "");
+    return this.firestore.collection('categories').doc(keyName).delete();
+  }
+
+  getStudyMaterials(): Observable<Attachment[]> {
+    return this.firestore.collection<Attachment>("studymaterial").valueChanges()
+  }
+
+  addStudyMaterial(attachment: Attachment): Promise<DocumentReference> {
+    return this.firestore.collection("studymaterial").add(attachment);
+  }
+
   modifyJobPost(jobpost): Promise<void> {
     return this.firestore.collection("jobposts").doc(jobpost.id).set(jobpost);
   }
 
-  uploadFileAndGetMetadata(mediaFolderPath: string,fileToUpload: File  ): FilesUploadMetadata {
+  deleteJobPost(jobpost): Promise<void> {
+    return this.firestore.collection("jobposts").doc(jobpost.id).delete();
+  }
+
+  uploadFileAndGetMetadata(mediaFolderPath: string, fileToUpload: File): FilesUploadMetadata {
     const { name } = fileToUpload;
     const filePath = `${mediaFolderPath}/${new Date().getTime()}_${name}`;
     const uploadTask: AngularFireUploadTask = this.storage.upload(

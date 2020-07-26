@@ -58,7 +58,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
     this.initiateAllFields();
     this.firebaseOps.getCategories().subscribe((cats) => {
       console.log(cats);
-      const catToInclude = ['govt job', 'pvt job']
+      const catToInclude = ['Government Jobs', 'Private Jobs']
       this.categoriesOptions = cats.filter(cat=> !catToInclude.includes(cat.tagName) );
       this.categorySelected = this.categoriesOptions[0];
     });
@@ -119,7 +119,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
     if(this.attachmentsToBeAdded.length>0){
         attachmentsUploaded = await this.uploadAttachments();
     }
-    const jobType = (this.jobType === 'govt') ? 'Government Job' :  'Private Job';
+    const jobType = (this.jobType === 'govt') ? 'Government Jobs' :  'Private Jobs';
     let tags = [ jobType ];
     const selectedTagNames = this.categoriesSelected.map(cat=> cat.displayName);
 
@@ -149,7 +149,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
       this.description = this.jobPost.description;
       this.jobContent = this.jobPost.content;
       this.tags = this.jobPost.tags;
-      this.jobType = this.tags.includes('govt job') ? 'govt' : 'pvt'
+      this.jobType = this.tags.includes('Government Jobs') ? 'govt' : 'pvt'
     } else {
       console.log("Field is empty")
     }

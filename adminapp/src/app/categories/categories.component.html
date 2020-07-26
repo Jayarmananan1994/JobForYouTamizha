@@ -4,8 +4,23 @@
   </div>
 </section>
 
+<section class="section">
+  <div class="container">
+    <form #jobPostForm="ngForm" (ngSubmit)="submitForm()">
+      <div class="field">
+        <label class="label">Job Title</label>
+        <input type="text" name="title" class="input" [(ngModel)]="newCategoryName" #titleInput="ngModel" required />
+        <div class="help is-error" *ngIf="titleInput.invalid && titleInput.touched">
+          Title is required
+        </div>
+      </div>
+      <button type="submit" class="button is-large is-warning"
+      [disabled]="jobPostForm.invalid">Submit</button>
+    </form>
+  </div>
 
-<section class="section" style="height: 100%;">
+</section>
+<section class="section">
   <div class="container">
     <mat-list>
       <mat-list-item *ngFor="let cat of categories">
@@ -13,27 +28,20 @@
         <p mat-line>
           <span> Tag name (internal): {{cat.tagName}} </span>
         </p>
-        <button mat-icon-button >
+        <button mat-icon-button (click)="deleteCategory(cat)">
           <mat-icon class="mat-24">delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <!-- <form (ngSubmit)="submitForm()" #jobPostForm="ngForm">
-      <div class="field">
-        <label class="label">Job Title</label>
-        <input type="text" name="title" class="input" [(ngModel)]="title" #titleInput="ngModel" required />
-        <div class="help is-error" *ngIf="titleInput.invalid && titleInput.touched">
-          Title is required
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Description</label>
-        <input type="text" name="description" class="input" [(ngModel)]="description" #descInput="ngModel" required />
-        <div class="help is-error" *ngIf="descInput.invalid && descInput.touched">
-          Description is required
-        </div>
-      </div>
-    </form> -->
-
   </div>
 </section>
+
+<div class="overlay" *ngIf="isLoading" >
+  <div class="center">
+      <mat-progress-spinner diameter=50
+                          mode="indeterminate"
+                color="accent">
+    </mat-progress-spinner>
+  </div>
+  </div>
+

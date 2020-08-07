@@ -44,6 +44,7 @@ dev_dependencies:
   photo_view: ^0.9.2
   flutter_plugin_pdf_viewer:
   url_launcher:
+  google_sign_in: ^4.5.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

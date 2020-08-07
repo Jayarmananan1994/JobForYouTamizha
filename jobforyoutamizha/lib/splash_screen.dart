@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jobforyoutamizha/common/constant.dart';
 import 'package:jobforyoutamizha/landing_page.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
+import 'package:jobforyoutamizha/service/user_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 
 class SplashScreen extends StatelessWidget {
   final JobInfoService _jobInfoService = locator<JobInfoService>();
   static const String PATH = '/splash-screen';
+   final UserInfoService _userInfoService = locator<UserInfoService>();
+
   @override
   Widget build(BuildContext context) {
     _navigateToHomePage(context);
@@ -41,6 +44,7 @@ class SplashScreen extends StatelessWidget {
   }
 
   void _navigateToHomePage(context) {
+     _userInfoService.getCurrentSignedInUser();
     _jobInfoService.getJobsByCategories('Government Job').then((value) => Navigator.pushNamedAndRemoveUntil(context, LandingPage.PATH, (route) => false));
   }
 }

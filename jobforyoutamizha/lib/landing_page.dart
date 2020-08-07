@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jobforyoutamizha/service/user_info_service.dart';
+import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/categories/categories.dart';
 import 'package:jobforyoutamizha/tabs/closing_jobs/closing_jobs.dart';
 import 'package:jobforyoutamizha/tabs/home/home.dart';
 import 'package:jobforyoutamizha/tabs/profile/profile.dart';
 import 'package:jobforyoutamizha/tabs/study_materials/study_materials.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LandingPage extends StatefulWidget {
   static const String PATH = '/landing-tab';
@@ -21,9 +24,28 @@ class _LandingPageState extends State<LandingPage> {
     TabMenu(3, 'Study material', Icons.library_books),
     TabMenu(4, 'Profile', Icons.account_circle)
   ];
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ]);
+ 
+  GoogleSignInAccount _currentUser;
+
   @override
   void initState() {
+    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+    //   setState(() {
+    //     _currentUser = account;
+    //   });
+    //   if (_currentUser != null) {
+    //    // _handleGetContact();
+    //    print(">>Current Signed in user:");
+    //    print(_currentUser);
+    //   }
+    // });
+
     initializeTabViews();
+    _googleSignIn.signInSilently();
     super.initState();
   }
 
@@ -44,20 +66,29 @@ class _LandingPageState extends State<LandingPage> {
             .toList(),
       ),
       floatingActionButton: Container(
-      width: 65.0,
-      height: 65.0,
-      child: new RawMaterialButton(
-        shape: new CircleBorder(),
-        elevation: 0.0,
-        fillColor: Colors.blue,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          Text('TNEB', style: TextStyle(color: Colors.white,),),
-          Text('data', style: TextStyle(color: Colors.white,))
-        ],),
-      onPressed: (){},
-      ),
+        width: 65.0,
+        height: 65.0,
+        child: new RawMaterialButton(
+          shape: new CircleBorder(),
+          elevation: 0.0,
+          fillColor: Colors.blue,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'TNEB',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              Text('data',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ))
+            ],
+          ),
+          onPressed: () {},
+        ),
       ),
     );
   }

@@ -32,19 +32,22 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_core: ^0.4.4+3
+  firebase_core: ^0.5.0
   cloud_firestore:
-  http:
-  firebase_auth: ^0.16.1
+  http_auth:
+  firebase_auth: ^0.18.0+1
   get_it: ^2.0.1
   shimmer:
   intl: ^0.16.1
-  dio:
   webview_flutter:
   photo_view: ^0.9.2
   flutter_plugin_pdf_viewer:
   url_launcher:
   google_sign_in: ^4.5.1
+  razorpay_flutter: 1.1.0
+  dash_chat: ^1.1.14
+  firebase_messaging: ^7.0.0
+  device_info: ^0.4.2+7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

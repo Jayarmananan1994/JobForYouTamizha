@@ -3,10 +3,13 @@ import 'package:jobforyoutamizha/service/user_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/categories/categories.dart';
 import 'package:jobforyoutamizha/tabs/closing_jobs/closing_jobs.dart';
+import 'package:jobforyoutamizha/tabs/help/help.dart';
 import 'package:jobforyoutamizha/tabs/home/home.dart';
 import 'package:jobforyoutamizha/tabs/profile/profile.dart';
 import 'package:jobforyoutamizha/tabs/study_materials/study_materials.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:jobforyoutamizha/main.dart';
 
 class LandingPage extends StatefulWidget {
   static const String PATH = '/landing-tab';
@@ -24,28 +27,22 @@ class _LandingPageState extends State<LandingPage> {
     TabMenu(3, 'Study material', Icons.library_books),
     TabMenu(4, 'Profile', Icons.account_circle)
   ];
-  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ]);
- 
-  GoogleSignInAccount _currentUser;
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>['email']);
+
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final UserInfoService _userInfoService = locator<UserInfoService>();
 
   @override
   void initState() {
-    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-    //   setState(() {
-    //     _currentUser = account;
-    //   });
-    //   if (_currentUser != null) {
-    //    // _handleGetContact();
-    //    print(">>Current Signed in user:");
-    //    print(_currentUser);
-    //   }
-    // });
-
     initializeTabViews();
-    _googleSignIn.signInSilently();
+    if (!signinAttempted) {
+      print(">>>>>>> signinin in silenlty>>>>>>>>>>");
+      signinAttempted = true;
+      _googleSignIn
+          .signInSilently(suppressErrors: false)
+          .then((value) => _userInfoService.updateAdminPhoneToken(value.email));
+    }
+
     super.initState();
   }
 
@@ -65,31 +62,8 @@ class _LandingPageState extends State<LandingPage> {
                 ))
             .toList(),
       ),
-      floatingActionButton: Container(
-        width: 65.0,
-        height: 65.0,
-        child: new RawMaterialButton(
-          shape: new CircleBorder(),
-          elevation: 0.0,
-          fillColor: Colors.blue,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'TNEB',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              Text('data',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ))
-            ],
-          ),
-          onPressed: () {},
-        ),
-      ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.chat_bubble), onPressed: _gotoHelp),
     );
   }
 
@@ -112,6 +86,10 @@ class _LandingPageState extends State<LandingPage> {
 
   getTitle() {
     return Text(_tabMenus[_selectedTab].menuName);
+  }
+
+  void _gotoHelp() async {
+    Navigator.of(context).pushNamed(Help.PATH);
   }
 }
 

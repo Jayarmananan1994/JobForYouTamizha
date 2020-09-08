@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobforyoutamizha/service/user_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
+import 'package:jobforyoutamizha/tabs/profile/admin_chat_list.dart';
 import 'package:jobforyoutamizha/tabs/profile/membership.dart';
 import 'package:jobforyoutamizha/tabs/profile/privacy_policy.dart';
 import 'package:jobforyoutamizha/tabs/profile/signin.dart';
@@ -10,6 +11,7 @@ class Profile extends StatelessWidget {
 
   Future<List<ProfileMenuItem>> buildMenu(context) async {
     var userFuture = await _userInfoService.getCurrentSignedInUser();
+    var adminUsers = await _userInfoService.getAdminUser();
     var menu1title =
         (userFuture != null) ? 'Welcome ' + userFuture.displayName : 'Welcome';
     var menu1Subtitle =
@@ -17,15 +19,15 @@ class Profile extends StatelessWidget {
     var menuItems = [
       ProfileMenuItem(menu1title, menu1Subtitle, Icons.account_circle,
           () => navigationAction(Signin.PATH, context)),
-      ProfileMenuItem(
-          'Become a member',
-          'Click to know more about benefits!',
-          Icons.monetization_on,
-          () => navigationAction(MemberShip.PATH, context)),
       ProfileMenuItem('Privacy policy', 'App terms & policies', Icons.lock,
           () => navigationAction(PrivacyPolicy.PATH, context)),
       ProfileMenuItem('Rate us', 'Give us your Feedback', Icons.star, () {}),
     ];
+    if(adminUsers.contains(userFuture?.emailId)){
+        menuItems.add(
+          ProfileMenuItem("Chat", "View App User chats", Icons.chat, ()=>Navigator.of(context).pushNamed(AdminChatList.PATH) )
+        );
+    }
     return menuItems;
   }
 

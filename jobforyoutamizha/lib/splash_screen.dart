@@ -23,8 +23,8 @@ class SplashScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Container(
-                width: 250,
-                height: 270,
+                width: 220,
+                height: 220,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
@@ -45,6 +45,7 @@ class SplashScreen extends StatelessWidget {
 
   void _navigateToHomePage(context) {
      _userInfoService.getCurrentSignedInUser();
+     _userInfoService.getAdminUser();
     _jobInfoService.getJobsByCategories('Government Job').then((value) => Navigator.pushNamedAndRemoveUntil(context, LandingPage.PATH, (route) => false));
   }
 }

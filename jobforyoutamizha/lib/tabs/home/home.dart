@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
+import 'package:jobforyoutamizha/model/category.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
+import 'package:jobforyoutamizha/tabs/categories/category_result.dart';
 import 'package:jobforyoutamizha/tabs/home/job_list.dart';
 import 'package:jobforyoutamizha/tabs/search_result/search_result.dart';
 
@@ -36,13 +38,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       height: MediaQuery.of(context).size.height,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: <Widget>[
           _searchBar(),
+          _tnebUpdate(),
           _filterButtons(),
           SizedBox(height: 10),
           _jobList()
@@ -75,7 +77,7 @@ class _HomeState extends State<Home> {
             onTap: () {
               FocusScope.of(context).unfocus();
               Navigator.of(context)
-                .pushNamed(SearchResult.PATH, arguments: _controller.text);
+                  .pushNamed(SearchResult.PATH, arguments: _controller.text);
             },
           )
         ],
@@ -162,8 +164,24 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-   _controller.dispose();
-   _scrollController.dispose();
+    _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  _tnebUpdate() {
+    return SizedBox(
+      width: 300,
+      child: RaisedButton(
+          color: Colors.white,
+          shape: StadiumBorder(),
+          onPressed: _gotoTnebUpdate,
+          child: Text('TNEB Updates', style: TextStyle(color: Colors.blue))),
+    );
+  }
+
+  void _gotoTnebUpdate() {
+      var category = Category("TNEB Updates", "TNEB Updates");
+      Navigator.of(context).pushNamed(CategoryResult.PATH, arguments: category);
   }
 }

@@ -140,6 +140,8 @@ class _SigninState extends State<Signin> {
           SizedBox(height: 50),
           Text(user.displayName,
               style: TextStyle(color: Colors.black, fontSize: 30)),
+          Text(user.emailId,
+              style: TextStyle(color: Colors.black, fontSize: 20, fontStyle: FontStyle.italic)),
           RaisedButton(
               color: Colors.blue,
               onPressed: () => _logout(context),
@@ -157,27 +159,26 @@ class _SigninState extends State<Signin> {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
         'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
+        //'https://www.googleapis.com/auth/contacts.readonly',
       ],
     );
     try {
       GoogleSignInAccount _googleAccount = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await _googleAccount.authentication;
-      AuthCredential credential = GoogleAuthProvider.getCredential(
+      AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      AuthResult authResult = await _auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
+      UserCredential authResult = await _auth.signInWithCredential(credential);
+      final User user = authResult.user;
       _userInfoService
           .addNewUser(user.uid, user.email, _googleAccount.displayName,
               _googleAccount.photoUrl)
           .then((r) {
-        print("Creating done");
-        setState(() {
-          
-        });
+        print("Creating/updation done");
+        _userInfoService.updateAdminPhoneToken(user.email);
+        Navigator.of(context).pushNamed(LandingPage.PATH);
       });
     } catch (error) {
       print('>>>>>>>>');
@@ -190,4 +191,12 @@ class _SigninState extends State<Signin> {
         .signout()
         .then((value) => Navigator.of(context).pushNamed(LandingPage.PATH));
   }
+
+  // void _updateTokenIfAdminEmail(String email) async {
+  //    List<String> adminEmails = await  _userInfoService.getAdminUser();
+  //    if(adminEmails.contains(email)){
+       
+        
+  //    } 
+  // }
 }

@@ -3,6 +3,8 @@ class JFTUser {
   String displayName;
   String emailId;
   String photoUrl;
+  static JFTUser ANONYMOUS_USER = JFTUser("", "", "", "");
+  static JFTUser ADMIN_USER = JFTUser("","admin","","");
 
   JFTUser(this.uid, this.displayName, this.emailId, this.photoUrl);
 

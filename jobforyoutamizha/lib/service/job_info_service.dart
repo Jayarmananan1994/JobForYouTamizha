@@ -1,10 +1,10 @@
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jobforyoutamizha/model/category.dart';
-import 'package:jobforyoutamizha/tabs/categories/categories.dart';
+
 
 class JobInfoService {
-  Firestore _firestore;
+  FirebaseFirestore _firestore;
   List<JobPost> _jobposts;
   List<JobPost> _closingJobs;
   List<Category> _categoryList;
@@ -32,8 +32,8 @@ class JobInfoService {
         .where('lastDate',
             isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()))
         .orderBy('lastDate', descending: true)
-        .getDocuments();
-    List documents = snapShot.documents;
+        .get();
+    List documents = snapShot.docs;
     _closingJobs = documents.map((e) => JobPost.fromSnapshotData(e)).toList();
     return _closingJobs;
   }
@@ -47,8 +47,8 @@ class JobInfoService {
         .where("tags", arrayContains: categoryTag)
         .orderBy('createdDate', descending: true)
         .limit(10)
-        .getDocuments();
-    List documents = snapShot.documents;
+        .get();
+    List documents = snapShot.docs;
     print(documents);
     _categoryJobs[categoryTag] =
         documents.map((e) => JobPost.fromSnapshotData(e)).toList();
@@ -62,8 +62,8 @@ class JobInfoService {
         .orderBy('createdDate',  descending: true)
         .startAfterDocument(lastEle)
         .limit(10)
-        .getDocuments();
-     List documents = snapShot.documents;
+        .get();
+     List documents = snapShot.docs;
       return documents.map((e) => JobPost.fromSnapshotData(e)).toList();
   }
 
@@ -71,22 +71,22 @@ class JobInfoService {
     if (_categoryList != null) {
       return _categoryList;
     }
-    var snapShot = await getFirestore().collection('categories').getDocuments();
-    List<DocumentSnapshot> documents = snapShot.documents;
+    var snapShot = await getFirestore().collection('categories').get();
+    List<DocumentSnapshot> documents = snapShot.docs;
 
     _categoryList =
-        documents.map((e) => Category.fromSnapshot(e.data)).toList();
+        documents.map((e) => Category.fromSnapshot(e.data())).toList();
     return _categoryList;
   }
 
   Future<List<Attachment>> getStudyMaterialsList() async {
     if (_studyMaterialList == null) {
       var snapshot =
-          await getFirestore().collection('studymaterial').getDocuments();
-      List documents = snapshot.documents;
+          await getFirestore().collection('studymaterial').get();
+      List<DocumentSnapshot> documents = snapshot.docs;
       print('At service>>>>>>>>>.' + documents.length.toString());
       _studyMaterialList = documents
-          .map((e) => Attachment(e['fileName'], e['fileUrl']))
+          .map((e) => Attachment.fromMap(e.data()))
           .toList();
     }
     return _studyMaterialList;
@@ -97,14 +97,14 @@ class JobInfoService {
         .collection('jobposts')
         .where("searchTexts", arrayContains: searchText)
         //.orderBy('createdDate',  descending: true)
-        .getDocuments();
-     List documents = snapShot.documents;
+        .get();
+     List documents = snapShot.docs;
       return documents.map((e) => JobPost.fromSnapshotData(e)).toList();
   }
 
 
-  Firestore getFirestore() {
-    if (_firestore == null) _firestore = Firestore.instance;
+  FirebaseFirestore getFirestore() {
+    if (_firestore == null) _firestore = FirebaseFirestore.instance;
     return _firestore;
   }
 }

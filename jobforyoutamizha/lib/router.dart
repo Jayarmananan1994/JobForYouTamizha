@@ -4,7 +4,10 @@ import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/model/category.dart';
 import 'package:jobforyoutamizha/splash_screen.dart';
 import 'package:jobforyoutamizha/tabs/categories/category_result.dart';
+import 'package:jobforyoutamizha/tabs/chat_room/user_chat.dart';
+import 'package:jobforyoutamizha/tabs/help/help.dart';
 import 'package:jobforyoutamizha/tabs/home/job_detail.dart';
+import 'package:jobforyoutamizha/tabs/profile/admin_chat_list.dart';
 import 'package:jobforyoutamizha/tabs/profile/membership.dart';
 import 'package:jobforyoutamizha/tabs/profile/privacy_policy.dart';
 import 'package:jobforyoutamizha/tabs/profile/signin.dart';
@@ -38,6 +41,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Signin());
     case MemberShip.PATH:
       return MaterialPageRoute(builder: (context) => MemberShip());
+    case Help.PATH:
+      return MaterialPageRoute(builder: (context) => Help());
+    case AdminChatList.PATH:
+      return MaterialPageRoute(builder: (context) => AdminChatList());    
+    case UserChat.PATH:
+       Map args = settings.arguments;
+      return MaterialPageRoute(builder: (context) => 
+          UserChat(userName: args['userName'], roomId: args['roomId'], chatUser: args['chatUser']));
     default:
       return MaterialPageRoute(builder: (context) => LandingPage());
   }

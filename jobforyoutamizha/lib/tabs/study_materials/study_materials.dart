@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/study_materials/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
 // import 'package:downloads_path_provider/downloads_path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class StudyMaterials extends StatefulWidget {
   @override
@@ -42,6 +37,7 @@ class _StudyMaterialsState extends State<StudyMaterials> {
                   },
                   itemCount: smItems.length);
             } else if (snapshot.hasError) {
+              print(snapshot.error);
               return Center(
                   child: Container(
                       width: 250,

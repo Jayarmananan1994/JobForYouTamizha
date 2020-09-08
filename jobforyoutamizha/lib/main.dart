@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jobforyoutamizha/common/constant.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/splash_screen.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'router.dart' as router;
 
-void main() {
+bool signinAttempted = false;
+void main() async {
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   setupLocator();
   runApp(JobForYouTamizha());
 }

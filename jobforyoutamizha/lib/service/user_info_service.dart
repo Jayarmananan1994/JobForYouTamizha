@@ -29,7 +29,7 @@ class UserInfoService {
     if (_adminUsers == null) {
       var docRef = await getFirestore()
           .collection('adminusers')
-          .doc('tb7MxublOyQ3iZhmCWYO')
+          .doc('K8ZVkgtuS9MuEhGeKN86')
           .get();
       var data = docRef.data();
       List emailsdyn = data['emails'];

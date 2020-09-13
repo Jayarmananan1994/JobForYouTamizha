@@ -1,58 +1,35 @@
 {
   "project_info": {
-    "project_number": "704779868817",
-    "firebase_url": "https://jobforyoutamizha.firebaseio.com",
-    "project_id": "jobforyoutamizha",
-    "storage_bucket": "jobforyoutamizha.appspot.com"
+    "project_number": "649568117891",
+    "firebase_url": "https://jobsforyou-tamizha.firebaseio.com",
+    "project_id": "jobsforyou-tamizha",
+    "storage_bucket": "jobsforyou-tamizha.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:704779868817:android:45d2a7b107111118fa7d30",
+        "mobilesdk_app_id": "1:649568117891:android:2b0f25275c5b3f1142e7b6",
         "android_client_info": {
           "package_name": "com.jobs.jobforyoutamizha"
         }
       },
       "oauth_client": [
         {
-          "client_id": "704779868817-u1mf089j1kd0tapo0m4bodglk33k9ev8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jobs.jobforyoutamizha",
-            "certificate_hash": "8dd94d0fc8353c58bd23a67d6b483f820d7cdb5b"
-          }
-        },
-        {
-          "client_id": "704779868817-r536s6tgbuon9uqt3ia3dmbauadsjoi0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jobs.jobforyoutamizha",
-            "certificate_hash": "d23d8421468765f904e20cc1b9ed7101c7f47f89"
-          }
-        },
-        {
-          "client_id": "704779868817-3mfq7jqr35kv4lt3if8ebpdkjmjkuo76.apps.googleusercontent.com",
+          "client_id": "649568117891-kg6m16n6b3fevqvbdt5d3er2f6o22dee.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAb6LcHz9I7Izc76yM-r3EFTin297kPKjI"
+          "current_key": "AIzaSyD-lbhby6rtdnSUOwG7PIyFF_3SOX4ymVc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "704779868817-3mfq7jqr35kv4lt3if8ebpdkjmjkuo76.apps.googleusercontent.com",
+              "client_id": "649568117891-kg6m16n6b3fevqvbdt5d3er2f6o22dee.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "704779868817-1nl5b5n66392nfqkn5dtbspugia198hl.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.jobs.jobforyoutamizha"
-              }
             }
           ]
         }

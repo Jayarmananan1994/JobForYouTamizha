@@ -5,6 +5,8 @@ import 'package:jobforyoutamizha/tabs/profile/admin_chat_list.dart';
 import 'package:jobforyoutamizha/tabs/profile/membership.dart';
 import 'package:jobforyoutamizha/tabs/profile/privacy_policy.dart';
 import 'package:jobforyoutamizha/tabs/profile/signin.dart';
+import 'package:launch_review/launch_review.dart';
+import 'dart:io' show Platform;
 
 class Profile extends StatelessWidget {
   final UserInfoService _userInfoService = locator<UserInfoService>();
@@ -21,12 +23,12 @@ class Profile extends StatelessWidget {
           () => navigationAction(Signin.PATH, context)),
       ProfileMenuItem('Privacy policy', 'App terms & policies', Icons.lock,
           () => navigationAction(PrivacyPolicy.PATH, context)),
-      ProfileMenuItem('Rate us', 'Give us your Feedback', Icons.star, () {}),
+      ProfileMenuItem('Rate us', 'Give us your Feedback', Icons.star,
+          () => showRateMeDialog(context)),
     ];
-    if(adminUsers.contains(userFuture?.emailId)){
-        menuItems.add(
-          ProfileMenuItem("Chat", "View App User chats", Icons.chat, ()=>Navigator.of(context).pushNamed(AdminChatList.PATH) )
-        );
+    if (adminUsers.contains(userFuture?.emailId)) {
+      menuItems.add(ProfileMenuItem("Chat", "View App User chats", Icons.chat,
+          () => Navigator.of(context).pushNamed(AdminChatList.PATH)));
     }
     return menuItems;
   }
@@ -54,11 +56,17 @@ class Profile extends StatelessWidget {
                     subtitle: Text(menu.description),
                     onTap: menu.action);
               });
-        }else{
-          return Center(child: CircularProgressIndicator(),);
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
       },
     ));
+  }
+
+  showRateMeDialog(context) {
+      LaunchReview.launch(androidAppId: 'com.jobs.jobforyoutamizha');
   }
 }
 

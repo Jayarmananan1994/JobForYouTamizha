@@ -48,6 +48,7 @@ dev_dependencies:
   dash_chat: ^1.1.14
   firebase_messaging: ^7.0.0
   device_info: ^0.4.2+7
+  launch_review: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

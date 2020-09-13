@@ -11,6 +11,7 @@ export interface JobPost{
    lastDate: Date;
    imageUrl: string;
    tags: string[]
+   searchTexts: string[]
 
 }
 

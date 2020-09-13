@@ -7,6 +7,7 @@ import { JobPost, Attachment } from './models/jobpost.model';
 import { Category } from './models/category.model';
 import { finalize } from 'rxjs/operators';
 import { switchMap } from 'rxjs/operators';
+import { visitAll } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +89,19 @@ export class FirebaseopsService {
       subject.next(categories);
     });
     return subject.asObservable()
+  }
+
+  validateLogin(username, password){
+    var subject = new Subject<boolean>();
+      this.firestore.collection('adminlogin', ref =>
+        ref
+          .where('emailId', '==', username)
+          .where('password', '==',password)
+      ).valueChanges().subscribe( val => {
+          console.log(val);
+          subject.next(val.length>0)
+      });
+      return subject.asObservable()
   }
 }
 

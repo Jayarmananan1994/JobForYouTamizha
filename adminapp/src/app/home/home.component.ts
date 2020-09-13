@@ -27,6 +27,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let sessionStart = sessionStorage.getItem("sessionstart");
+    if(sessionStart==="false") {
+      this.router.navigate(['login'])
+    }
 
     this.firebaseOps.getInitialJobPosts().snapshotChanges().pipe(
       map(actions => {

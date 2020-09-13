@@ -1,0 +1,38 @@
+<section class="hero is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Login </h1>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form (ngSubmit)="onSubmit()" #jobPostForm="ngForm">
+      <div class="field">
+        <label class="label">Email Id</label>
+        <input type="text" name="username" class="input" [(ngModel)]="username" #titleInput="ngModel" required />
+        <div class="help is-error" *ngIf="titleInput.invalid && titleInput.touched">
+          email is required
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <input type="password" name="description" class="input" [(ngModel)]="password" #descInput="ngModel" required />
+        <div class="help is-error" *ngIf="descInput.invalid && descInput.touched">
+          Password is required
+        </div>
+      </div>
+      <button type="submit" class="button is-large is-warning"
+        [disabled]="jobPostForm.invalid">Submit</button>
+    </form>
+  </div>
+</section>
+<div class="overlay" *ngIf="isLoading" >
+  <div class="center">
+      <mat-progress-spinner diameter=50
+                          mode="indeterminate"
+                color="accent">
+    </mat-progress-spinner>
+  </div>
+  </div>

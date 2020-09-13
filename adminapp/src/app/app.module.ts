@@ -30,6 +30,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CategoriesComponent } from './categories/categories.component';
 import { StudymaterialComponent } from './studymaterial/studymaterial.component';
 import { ConfirmDialog } from './dialog/ConfirmDialog';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ConfirmDialog } from './dialog/ConfirmDialog';
     GeneralDialog,
     ConfirmDialog,
     CategoriesComponent,
-    StudymaterialComponent
+    StudymaterialComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,8 @@ import { ConfirmDialog } from './dialog/ConfirmDialog';
       { path: 'addpost', component: NewpostComponent },
       { path: 'editpost', component: EditJobpostComponent},
       { path: 'categories', component: CategoriesComponent},
-      {path: 'study-materials', component: StudymaterialComponent}
+      {path: 'study-materials', component: StudymaterialComponent},
+      { path: 'login', component: LoginComponent}
     ]),
     BrowserAnimationsModule,
     InfiniteScrollModule

@@ -55,6 +55,8 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(" On init....")
+    console.log(this.jobPost);
     this.initiateAllFields();
     this.firebaseOps.getCategories().subscribe((cats) => {
       console.log(cats);
@@ -84,6 +86,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
   removeTag(tag) {
     console.log(tag);
     this.tags = this.tags.filter(cat => cat !== tag);
+    this.dialog.open
   }
 
   removeAttachment(attachment) {
@@ -113,6 +116,11 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
  async submitForm() {
     let attachmentsUploaded, coverImageToUpload;
     this.isLoading = true;
+    if(this.coverImage== null && this.jobPost==undefined ){
+      this.dialog.open(GeneralDialog, {data: "You must upload a cover image for creating post."});
+      this.isLoading = false;
+      return;
+    }
     if(this.coverImage!= null){
       coverImageToUpload = await this.uploadFile('jobPost', this.coverImage)
     }
@@ -121,10 +129,11 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
     }
     const jobType = (this.jobType === 'govt') ? 'Government Jobs' :  'Private Jobs';
     let tags = [ jobType ];
-    const selectedTagNames = this.categoriesSelected.map(cat=> cat.displayName);
-
+    let selectedTagNames = this.categoriesSelected.map(cat=> cat.displayName);
+    selectedTagNames = selectedTagNames.filter(cat => (cat !== 'Government Jobs' && cat !=='Private Jobs') );
     tags = tags.concat(selectedTagNames);
-    let jobPost: JobPost = this.createJobPost(attachmentsUploaded, coverImageToUpload, this.lastDate, tags);
+    let jobPostId = (this.jobPost==undefined || this.jobPost==null) ? null: this.jobPost.id;
+    let jobPost: JobPost = this.createJobPost(jobPostId, attachmentsUploaded, coverImageToUpload, this.lastDate, tags);
     console.log(jobPost);
     if(jobPost.id!=null){
       this.firebaseOps.modifyJobPost(jobPost).then(()=>{
@@ -172,6 +181,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
     const downloadUrl = this.firebaseOps.uploadFileAndGetMetadata(path,file).downloadUrl$;
     return new Promise<string>(resolve=>{
       downloadUrl.pipe(takeUntil(this.destroy$), catchError((error) => {
+        console.log(error);
         this.snackBar.open('Error uploading file', 'Close',{});
         resolve(null);
         return EMPTY;
@@ -184,21 +194,24 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
 
 
 
-  createJobPost(attachments: Attachment[], newImageUrl, lastDate, newTags): JobPost {
+  createJobPost(jobId, attachments: Attachment[], newImageUrl, lastDate, newTags): JobPost {
     attachments = (attachments==undefined) ?  []: attachments;
     const jobAttachemnet =  (this.jobPost!=null)? this.jobPost.attachments.concat(attachments) : attachments;
-    const tags = (this.jobPost!=null) ? this.jobPost.tags.concat(newTags) : newTags
+    const notDefaultCat =  this.jobPost.tags.filter(cat => (cat !== 'Government Jobs' && cat !=='Private Jobs') );
+    const tags = (this.jobPost!=null) ? notDefaultCat.concat(newTags) : newTags
     const imageUrl = (newImageUrl==undefined) ? this.jobPost.imageUrl : newImageUrl;
+    const searchTexts = this.title.split(" ");
     return {
       title: this.title,
-      id: null,
+      id: jobId,
       description: this.description,
       content: this.jobContent,
       attachments: jobAttachemnet,
       createdDate: new Date(),
       lastDate,
       imageUrl,
-      tags
+      tags,
+      searchTexts
     }
   }
 

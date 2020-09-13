@@ -5,13 +5,21 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyBttGCkOxdMrTQhE5C5HXTIbgCIWnqPp9Q",
-    authDomain: "jobforyoutamizha.firebaseapp.com",
-    databaseURL: "https://jobforyoutamizha.firebaseio.com",
-    projectId: "jobforyoutamizha",
-    storageBucket: "jobforyoutamizha.appspot.com",
-    messagingSenderId: "704779868817",
-    appId: "1:704779868817:web:6942c08280da5e24fa7d30"
+    // apiKey: "AIzaSyBttGCkOxdMrTQhE5C5HXTIbgCIWnqPp9Q",
+    // authDomain: "jobforyoutamizha.firebaseapp.com",
+    // databaseURL: "https://jobforyoutamizha.firebaseio.com",
+    // projectId: "jobforyoutamizha",
+    // storageBucket: "jobforyoutamizha.appspot.com",
+    // messagingSenderId: "704779868817",
+    // appId: "1:704779868817:web:6942c08280da5e24fa7d30"
+    apiKey: "AIzaSyBQfaliawvUPDGgHDCqbA9d5B8KKAf8DGM",
+    authDomain: "jobsforyou-tamizha.firebaseapp.com",
+    databaseURL: "https://jobsforyou-tamizha.firebaseio.com",
+    projectId: "jobsforyou-tamizha",
+    storageBucket: "jobsforyou-tamizha.appspot.com",
+    messagingSenderId: "649568117891",
+    appId: "1:649568117891:web:4979987b4994759642e7b6",
+    measurementId: "G-N1B5WFVYQL"
   }
 };
 

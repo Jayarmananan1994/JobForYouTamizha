@@ -11,11 +11,10 @@ class UserInfoService {
   JFTUser _currentSignedInUser;
   List<String> _adminUsers;
   GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-      //'https://www.googleapis.com/auth/contacts.readonly',
-    ],
+    scopes: <String>['email'],
   );
+  int detailPageVisitCount = 0;
+
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -58,8 +57,8 @@ class UserInfoService {
     }
   }
 
-  Future<void> addChatRoom(JFTUser user) async{
-   var deviceToken =  await getDeviceToken();
+  Future<void> addChatRoom(JFTUser user) async {
+    var deviceToken = await getDeviceToken();
     var chatRoomInfo = {
       "id": "messages_" + user.uid,
       "name": user.displayName,
@@ -110,10 +109,19 @@ class UserInfoService {
         "manufacturer": deviceData.manufacturer,
         "isPhysicalDevice": deviceData.isPhysicalDevice
       };
-      getFirestore()
-          .collection('adminphones')
-          .doc(email)
-          .set(data);
+      getFirestore().collection('adminphones').doc(email).set(data);
     }
+  }
+
+  int getDetailpageVisitCount() {
+    return detailPageVisitCount;
+  }
+
+  void incrementDetailPageVisitCount() {
+    detailPageVisitCount += 1;
+  }
+
+  void resetDetailPageVisitCount() {
+    detailPageVisitCount = 0;
   }
 }

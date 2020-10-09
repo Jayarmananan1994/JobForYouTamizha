@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil, catchError } from 'rxjs/operators';
 import { Subject, EMPTY, Observable } from 'rxjs';
 import { Attachment } from '../models/jobpost.model';
+import * as uuid from 'uuid';
+import { ConfirmDialog } from '../dialog/ConfirmDialog';
 
 @Component({
   selector: 'app-studymaterial',
@@ -32,7 +34,9 @@ export class StudymaterialComponent implements OnInit {
   async uploadDocument() {
     this.isLoading = true;
     var url = await this.uploadFile('study-material', this.fileSelected);
-    let ref = await this.firebaseOps.addStudyMaterial({fileName: this.fileSelected.name, fileUrl: url});
+    const myId = uuid.v4();
+    const attachemntId = myId.replaceAll('-','');
+    let ref = await this.firebaseOps.addStudyMaterial({id: attachemntId,fileName: this.fileSelected.name, fileUrl: url});
     console.log(url);
     console.log(ref);
     this.fileSelected = null;
@@ -52,5 +56,25 @@ export class StudymaterialComponent implements OnInit {
       });
     });
 
+  }
+
+  deleteAttachement(item){
+    console.log(item);
+    const myId = uuid.v4();
+    console.log(myId);
+    const dialogRef = this.dialog.open(ConfirmDialog, {data: "Are you sure you want to delte the file ?"});
+    dialogRef.afterClosed().subscribe(result=>{
+        if(result){
+          this.firebaseOps.deleteStudyMaterial(item).then(()=>{
+            //console.log("Deleted");
+            this.dialog.open(GeneralDialog, { data: "File deleted successfully"});
+          });
+        }
+    })
+
+  }
+
+  openAttachment(item) {
+    window.open(item.fileUrl, "_blank");
   }
 }

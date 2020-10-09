@@ -16,6 +16,7 @@ export interface JobPost{
 }
 
 export interface Attachment{
+  id: string;
   fileName: string;
   fileUrl: string;
 }

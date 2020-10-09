@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jobforyoutamizha/adManager.dart';
+import 'package:jobforyoutamizha/common/constant.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/model/category.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
@@ -6,6 +8,8 @@ import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/categories/category_result.dart';
 import 'package:jobforyoutamizha/tabs/home/job_list.dart';
 import 'package:jobforyoutamizha/tabs/search_result/search_result.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -21,9 +25,14 @@ class _HomeState extends State<Home> {
   ScrollController _scrollController = new ScrollController();
   JobInfoService _jobInfoService = locator<JobInfoService>();
   bool _nomoreItems = false;
+  // BannerAd _bannerAd;
+  // InterstitialAd interstitialAd;
+  // static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(keywords: ["job","vacancy"]);
 
   @override
   void initState() {
+    //_initAdMob();
+    //interstitialAd = createInterstitialAd()..load()..show();
     super.initState();
     _controller = TextEditingController();
     _scrollController.addListener(() {
@@ -43,6 +52,7 @@ class _HomeState extends State<Home> {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: <Widget>[
+          _adSpace(),
           _searchBar(),
           _tnebUpdate(),
           _filterButtons(),
@@ -166,6 +176,8 @@ class _HomeState extends State<Home> {
   void dispose() {
     _controller.dispose();
     _scrollController.dispose();
+    //_bannerAd.dispose();
+    //interstitialAd.dispose();
     super.dispose();
   }
 
@@ -181,7 +193,19 @@ class _HomeState extends State<Home> {
   }
 
   void _gotoTnebUpdate() {
-      var category = Category("TNEB Updates", "TNEB Updates");
-      Navigator.of(context).pushNamed(CategoryResult.PATH, arguments: category);
+    var category = Category("TNEB Updates", "TNEB Updates");
+    Navigator.of(context).pushNamed(CategoryResult.PATH, arguments: category);
   }
+
+  _adSpace() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: createBannerAd(AdmobBannerSize.BANNER),
+    );
+  }
+
+  // Future<void> _initAdMob() {
+  //   return FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+  // }
+
 }

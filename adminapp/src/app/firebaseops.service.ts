@@ -48,8 +48,13 @@ export class FirebaseopsService {
     return this.firestore.collection<Attachment>("studymaterial").valueChanges()
   }
 
-  addStudyMaterial(attachment: Attachment): Promise<DocumentReference> {
-    return this.firestore.collection("studymaterial").add(attachment);
+  addStudyMaterial(attachment: Attachment): Promise<void> {
+    return this.firestore.collection("studymaterial").doc(attachment.id).set(attachment);
+  }
+
+   deleteStudyMaterial(attachment: Attachment): Promise<void> {
+    this.storage.storage.refFromURL(attachment.fileUrl).delete();
+    return this.firestore.collection("studymaterial").doc(attachment.id).delete();
   }
 
   modifyJobPost(jobpost): Promise<void> {

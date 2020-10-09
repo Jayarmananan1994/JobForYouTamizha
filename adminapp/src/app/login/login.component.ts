@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseopsService } from '../firebaseops.service';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralDialog } from '../dialog/general-dialog';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor( private router: Router, private firebaseOps: FirebaseopsService ) { }
+  constructor( private router: Router, private firebaseOps: FirebaseopsService, private dialog: MatDialog ) { }
 
   ngOnInit(): void {
     // this.form = this.formBuilder.group({
@@ -33,11 +35,15 @@ export class LoginComponent implements OnInit {
     //   return;
     // }
 
-    console.log(this.password+"  "+this.username);
+
       this.firebaseOps.validateLogin(this.username, this.password).subscribe(result =>{
         console.log(result)
-        sessionStorage.setItem("sessionstart","true");
-        this.router.navigate([''])
+        if(result){
+          sessionStorage.setItem("sessionstart","true");
+          this.router.navigate([''])
+        }else{
+          this.dialog.open(GeneralDialog, {data: "Invalid credentail"})
+        }
       });
   }
 

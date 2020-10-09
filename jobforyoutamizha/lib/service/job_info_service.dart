@@ -30,8 +30,8 @@ class JobInfoService {
     var snapShot = await getFirestore()
         .collection('jobposts')
         .where('lastDate',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()))
-        .orderBy('lastDate', descending: true)
+            isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()) )
+        .orderBy('lastDate', descending: false)
         .get();
     List documents = snapShot.docs;
     _closingJobs = documents.map((e) => JobPost.fromSnapshotData(e)).toList();
@@ -92,13 +92,16 @@ class JobInfoService {
     return _studyMaterialList;
   }
 
-  Future<List<JobPost>> searchJobPost(String searchText) async{
+  Future<List<JobPost>> searchJobPost(List<String> searchText) async{
+     print(searchText.toString());
        var snapShot = await getFirestore()
         .collection('jobposts')
-        .where("searchTexts", arrayContains: searchText)
+        .where("searchTexts", arrayContainsAny: searchText)
+        
         //.orderBy('createdDate',  descending: true)
         .get();
      List documents = snapShot.docs;
+     print(documents.toString());
       return documents.map((e) => JobPost.fromSnapshotData(e)).toList();
   }
 

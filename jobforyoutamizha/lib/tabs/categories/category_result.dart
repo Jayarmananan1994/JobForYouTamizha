@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/model/category.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/home/job_list.dart';
-
-// class CategoryResult extends StatelessWidget {
-//   static const String PATH = '/category-result';
-//   final Category category;
-//   CategoryResult({this.category});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(category.displayName),
-//       ),
-//       body: CategoryJobList(category: category),
-//     );
-//   }
-// }
+import 'package:admob_flutter/admob_flutter.dart';
 
 class CategoryResult extends StatefulWidget {
   final Category category;
@@ -36,18 +22,27 @@ class _CategoryResultState extends State<CategoryResult> {
   ScrollController _scrollController = new ScrollController();
   List<JobPost> _jobPostToShow = [];
   bool _nomoreItems = false;
+  // BannerAd _bannerAd;
 
   @override
   void initState() {
     super.initState();
+   // _initAdMob();
     _scrollController.addListener(() {
       var pos = _scrollController.position;
       if (pos.pixels == pos.maxScrollExtent && !_nomoreItems) {
-         print('Reached the bottom');
+        print('Reached the bottom');
         _loadMorePost();
       }
     });
   }
+
+  // Future<void> _initAdMob() async {
+  //   await FirebaseAdMob.instance.initialize(appId: adMobAppId);
+  //   _bannerAd = createBannerAd(AdSize.banner)
+  //     ..load()
+  //     ..show();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +54,18 @@ class _CategoryResultState extends State<CategoryResult> {
         height: MediaQuery.of(context).size.height,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
-          children: <Widget>[_jobList(widget.category.displayName)],
+          children: <Widget>[
+            _adSpace(),
+            _jobList(widget.category.displayName)],
         ),
       ),
+    );
+  }
+
+   _adSpace() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: createBannerAd(AdmobBannerSize.BANNER),
     );
   }
 
@@ -99,5 +103,11 @@ class _CategoryResultState extends State<CategoryResult> {
     } else {
       setState(() => _jobPostToShow.addAll(post));
     }
+  }
+
+  @override
+  void dispose() {
+    //_bannerAd.dispose();
+    super.dispose();
   }
 }

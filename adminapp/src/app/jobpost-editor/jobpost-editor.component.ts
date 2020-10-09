@@ -5,12 +5,13 @@ import { AngularFirestore } from '@angular/fire/firestore/firestore';
 import * as firebase from 'firebase';
 import { FirebaseopsService } from '../firebaseops.service';
 import { MatDialog } from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { GeneralDialog } from '../dialog/general-dialog';
 import { takeUntil, catchError } from 'rxjs/operators';
 import { Observable, Subject, EMPTY } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import * as uuid from 'uuid';
 
 //import { EventEmitter } from 'protractor';
 
@@ -38,6 +39,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
   jobType: string = 'govt';
   lastDate: Date = null;
   coverImage: File = null;
+  createdDate:  firebase.firestore.Timestamp;
 
   tags: string[] = [];
   categorySelected: Category;
@@ -50,7 +52,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
-  constructor(private readonly snackBar: MatSnackBar,private firebaseOps: FirebaseopsService, private dialog: MatDialog) {
+  constructor(private readonly snackBar: MatSnackBar, private firebaseOps: FirebaseopsService, private dialog: MatDialog) {
 
   }
 
@@ -61,7 +63,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
     this.firebaseOps.getCategories().subscribe((cats) => {
       console.log(cats);
       const catToInclude = ['Government Jobs', 'Private Jobs']
-      this.categoriesOptions = cats.filter(cat=> !catToInclude.includes(cat.tagName) );
+      this.categoriesOptions = cats.filter(cat => !catToInclude.includes(cat.tagName));
       this.categorySelected = this.categoriesOptions[0];
     });
 
@@ -86,7 +88,6 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
   removeTag(tag) {
     console.log(tag);
     this.tags = this.tags.filter(cat => cat !== tag);
-    this.dialog.open
   }
 
   removeAttachment(attachment) {
@@ -113,43 +114,52 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
     this.attachmentsToBeAdded = this.attachmentsToBeAdded.filter(att => att.name !== fileToRemove.name);
   }
 
- async submitForm() {
+  async submitForm() {
     let attachmentsUploaded, coverImageToUpload;
     this.isLoading = true;
-    if(this.coverImage== null && this.jobPost==undefined ){
-      this.dialog.open(GeneralDialog, {data: "You must upload a cover image for creating post."});
+    if (this.coverImage == null && this.jobPost == undefined) {
+      this.dialog.open(GeneralDialog, { data: "You must upload a cover image for creating post." });
       this.isLoading = false;
       return;
     }
-    if(this.coverImage!= null){
+    if (this.coverImage != null) {
       coverImageToUpload = await this.uploadFile('jobPost', this.coverImage)
     }
-    if(this.attachmentsToBeAdded.length>0){
-        attachmentsUploaded = await this.uploadAttachments();
+    if (this.attachmentsToBeAdded.length > 0) {
+      attachmentsUploaded = await this.uploadAttachments();
     }
-    const jobType = (this.jobType === 'govt') ? 'Government Jobs' :  'Private Jobs';
-    let tags = [ jobType ];
-    let selectedTagNames = this.categoriesSelected.map(cat=> cat.displayName);
-    selectedTagNames = selectedTagNames.filter(cat => (cat !== 'Government Jobs' && cat !=='Private Jobs') );
+    const jobType = (this.jobType === 'govt') ? 'Government Jobs' : 'Private Jobs';
+    let tags = [jobType];
+    let selectedTagNames = this.categoriesSelected.map(cat => cat.displayName);
+    selectedTagNames = selectedTagNames.filter(cat => (cat !== 'Government Jobs' && cat !== 'Private Jobs'));
     tags = tags.concat(selectedTagNames);
-    let jobPostId = (this.jobPost==undefined || this.jobPost==null) ? null: this.jobPost.id;
-    let jobPost: JobPost = this.createJobPost(jobPostId, attachmentsUploaded, coverImageToUpload, this.lastDate, tags);
+    let jobPostId = (this.jobPost == undefined || this.jobPost == null) ? null : this.jobPost.id;
+
+
+    var createdDate = (this.jobPost == undefined || this.jobPost == null) ? new Date() : this.createFirebaseTimestamp(this.jobPost.createdDate);
+    let jobPost: JobPost = this.createJobPost(jobPostId, attachmentsUploaded, coverImageToUpload, createdDate, this.lastDate, tags);
     console.log(jobPost);
-    if(jobPost.id!=null){
-      this.firebaseOps.modifyJobPost(jobPost).then(()=>{
+    if (jobPost.id != null) {
+      this.firebaseOps.modifyJobPost(jobPost).then(() => {
         this.isLoading = false;
         this.dialog.open(GeneralDialog, { data: "Post creation/updation successful!" });
         this.onComplete.emit(jobPost);
       });
-    }else{
-      this.firebaseOps.addJobPost(jobPost).then((ref)=>{
+    } else {
+      this.firebaseOps.addJobPost(jobPost).then((ref) => {
         this.isLoading = false;
-        jobPost.id =  ref.id;
+        jobPost.id = ref.id;
         this.dialog.open(GeneralDialog, { data: "Post creation/updation successful!" });
         this.onComplete.emit(jobPost);
       });
     }
 
+  }
+
+  createFirebaseTimestamp(createdDate){
+    let timp =  new firebase.firestore.Timestamp(createdDate.seconds, createdDate.nanoseconds);
+    console.log(timp);
+    return timp;
   }
 
   initiateAllFields() {
@@ -165,49 +175,51 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
   }
 
 
- async uploadAttachments() : Promise<Attachment[]>{
+  async uploadAttachments(): Promise<Attachment[]> {
     const attachments: Attachment[] = [];
     //const url = await this.uploadFile('attachments', null);
     for (const file of this.attachmentsToBeAdded) {
-      const url =  await this.uploadFile('attachments', file);
+      const url = await this.uploadFile('attachments', file);
       console.log(url);
-      const att: Attachment = { fileName: file.name, fileUrl: url};
+      const myId = uuid.v4();
+      const attachemntId = myId.replaceAll('-', '');
+      const att: Attachment = { id: '', fileName: file.name, fileUrl: url };
       attachments.push(att);
     }
     return attachments;
   }
 
-  uploadFile(path, file) : Promise<string>{
-    const downloadUrl = this.firebaseOps.uploadFileAndGetMetadata(path,file).downloadUrl$;
-    return new Promise<string>(resolve=>{
+  uploadFile(path, file): Promise<string> {
+    const downloadUrl = this.firebaseOps.uploadFileAndGetMetadata(path, file).downloadUrl$;
+    return new Promise<string>(resolve => {
       downloadUrl.pipe(takeUntil(this.destroy$), catchError((error) => {
         console.log(error);
-        this.snackBar.open('Error uploading file', 'Close',{});
+        this.snackBar.open('Error uploading file', 'Close', {});
         resolve(null);
         return EMPTY;
-    })).subscribe(downloadUrl=>{
-      resolve(downloadUrl);
-    });
+      })).subscribe(downloadUrl => {
+        resolve(downloadUrl);
+      });
     });
 
   }
 
 
 
-  createJobPost(jobId, attachments: Attachment[], newImageUrl, lastDate, newTags): JobPost {
-    attachments = (attachments==undefined) ?  []: attachments;
-    const jobAttachemnet =  (this.jobPost!=null)? this.jobPost.attachments.concat(attachments) : attachments;
-    const notDefaultCat =  this.jobPost.tags.filter(cat => (cat !== 'Government Jobs' && cat !=='Private Jobs') );
-    const tags = (this.jobPost!=null) ? notDefaultCat.concat(newTags) : newTags
-    const imageUrl = (newImageUrl==undefined) ? this.jobPost.imageUrl : newImageUrl;
-    const searchTexts = this.title.split(" ");
+  createJobPost(jobId, attachments: Attachment[], newImageUrl, createdDate, lastDate, newTags): JobPost {
+    attachments = (attachments == undefined) ? [] : attachments;
+    const jobAttachemnet = (this.jobPost != null) ? this.jobPost.attachments.concat(attachments) : attachments;
+    const notDefaultCat = (this.jobPost !== undefined && this.jobPost !== null) ? this.tags.filter(cat => (cat !== 'Government Jobs' && cat !== 'Private Jobs')) : [];
+    const tags = (this.jobPost != null) ? notDefaultCat.concat(newTags) : newTags
+    const imageUrl = (newImageUrl == undefined) ? this.jobPost.imageUrl : newImageUrl;
+    const searchTexts = this.title.toLowerCase().split(" ");
     return {
       title: this.title,
       id: jobId,
       description: this.description,
       content: this.jobContent,
       attachments: jobAttachemnet,
-      createdDate: new Date(),
+      createdDate: createdDate, //new Date(),
       lastDate,
       imageUrl,
       tags,

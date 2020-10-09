@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-icon-button>
+    <button mat-icon-button  *ngIf="isLoggedIn()">
       <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
     </button>
     <h1>Job for you Tamizha</h1>

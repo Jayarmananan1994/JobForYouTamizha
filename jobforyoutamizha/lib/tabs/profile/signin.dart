@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/landing_page.dart';
 import 'package:jobforyoutamizha/model/JFTUser.dart';
 import 'package:jobforyoutamizha/service/user_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
-import 'package:jobforyoutamizha/tabs/home/home.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
 
 class Signin extends StatefulWidget {
   static const String PATH = '/signin';
@@ -16,6 +17,26 @@ class Signin extends StatefulWidget {
 
 class _SigninState extends State<Signin> {
   final UserInfoService _userInfoService = locator<UserInfoService>();
+  //BannerAd _bannerAd;
+
+  @override
+  void initState() {
+    //_initAdMob();
+    super.initState();
+  }
+
+  // Future<void> _initAdMob() async {
+  //  await FirebaseAdMob.instance.initialize(appId: adMobAppId);
+  //   _bannerAd = createBannerAd(AdSize.banner)
+  //     ..load()
+  //     ..show();
+  // }
+
+  // @override
+  // void dispose() {
+  //   _bannerAd.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +162,10 @@ class _SigninState extends State<Signin> {
           Text(user.displayName,
               style: TextStyle(color: Colors.black, fontSize: 30)),
           Text(user.emailId,
-              style: TextStyle(color: Colors.black, fontSize: 20, fontStyle: FontStyle.italic)),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontStyle: FontStyle.italic)),
           RaisedButton(
               color: Colors.blue,
               onPressed: () => _logout(context),
@@ -157,10 +181,7 @@ class _SigninState extends State<Signin> {
   _googleSignin() async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: [
-        'email',
-        //'https://www.googleapis.com/auth/contacts.readonly',
-      ],
+      scopes: ['email'],
     );
     try {
       GoogleSignInAccount _googleAccount = await _googleSignIn.signIn();
@@ -195,8 +216,7 @@ class _SigninState extends State<Signin> {
   // void _updateTokenIfAdminEmail(String email) async {
   //    List<String> adminEmails = await  _userInfoService.getAdminUser();
   //    if(adminEmails.contains(email)){
-       
-        
-  //    } 
+
+  //    }
   // }
 }

@@ -35,10 +35,10 @@
     <mat-nav-list>
       <mat-list-item  *ngFor="let item of studyMaterialList | async">
          <span matLine>{{ item.fileName }}</span>
-         <button mat-icon-button>
+         <button mat-icon-button (click)="deleteAttachement(item)">
           <mat-icon> delete</mat-icon>
        </button>
-         <button mat-icon-button>
+         <button mat-icon-button (click)="openAttachment(item)">
             <mat-icon>info</mat-icon>
          </button>
 

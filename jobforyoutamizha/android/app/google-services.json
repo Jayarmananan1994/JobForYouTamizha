@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "649568117891-kujjs7mfmnd97m48ohutqbeufihrsnel.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jobs.jobforyoutamizha",
+            "certificate_hash": "8dd94d0fc8353c58bd23a67d6b483f820d7cdb5b"
+          }
+        },
+        {
+          "client_id": "649568117891-g6m0do61tu1aknm74k58j5ahj739smof.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jobs.jobforyoutamizha",
+            "certificate_hash": "9462fa8f25314deec0692660707ba4048e73e248"
+          }
+        },
+        {
           "client_id": "649568117891-kg6m16n6b3fevqvbdt5d3er2f6o22dee.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -33,7 +49,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-1698473155677356~6155661924"
     }
   ],
   "configuration_version": "1"

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/service/user_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/profile/admin_chat_list.dart';
@@ -6,7 +7,7 @@ import 'package:jobforyoutamizha/tabs/profile/membership.dart';
 import 'package:jobforyoutamizha/tabs/profile/privacy_policy.dart';
 import 'package:jobforyoutamizha/tabs/profile/signin.dart';
 import 'package:launch_review/launch_review.dart';
-import 'dart:io' show Platform;
+import 'package:admob_flutter/admob_flutter.dart';
 
 class Profile extends StatelessWidget {
   final UserInfoService _userInfoService = locator<UserInfoService>();
@@ -37,6 +38,13 @@ class Profile extends StatelessWidget {
     Navigator.of(context).pushNamed(path);
   }
 
+   _adSpace() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: createBannerAd(AdmobBannerSize.BANNER),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var menuItemsFuture = buildMenu(context);
@@ -46,16 +54,23 @@ class Profile extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var menuItems = snapshot.data;
-          return ListView.builder(
-              itemCount: menuItems.length,
-              itemBuilder: (context, index) {
-                var menu = menuItems[index];
-                return ListTile(
-                    leading: Icon(menu.icon, size: 30),
-                    title: Text(menu.menuName),
-                    subtitle: Text(menu.description),
-                    onTap: menu.action);
-              });
+          return Column(
+            children: <Widget>[
+              _adSpace(),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: menuItems.length,
+                    itemBuilder: (context, index) {
+                      var menu = menuItems[index];
+                      return ListTile(
+                          leading: Icon(menu.icon, size: 30),
+                          title: Text(menu.menuName),
+                          subtitle: Text(menu.description),
+                          onTap: menu.action);
+                    }),
+              ),
+            ],
+          );
         } else {
           return Center(
             child: CircularProgressIndicator(),

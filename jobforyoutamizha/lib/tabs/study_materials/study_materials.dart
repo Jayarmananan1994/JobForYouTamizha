@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/study_materials/open_file.dart';
 // import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+
 
 class StudyMaterials extends StatefulWidget {
   @override
@@ -26,16 +29,23 @@ class _StudyMaterialsState extends State<StudyMaterials> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var smItems = snapshot.data;
-              return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(smItems[index].fileName),
-                      trailing: FlatButton(
-                          child: Text('Open', style: TextStyle(color: Colors.blue)),
-                          onPressed: () => openFile(smItems[index])),
-                    );
-                  },
-                  itemCount: smItems.length);
+              return Column(
+                children: <Widget>[
+                  _adSpace(),
+                  Expanded(
+                    child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(smItems[index].fileName),
+                            trailing: FlatButton(
+                                child: Text('Open', style: TextStyle(color: Colors.blue)),
+                                onPressed: () => openFile(smItems[index])),
+                          );
+                        },
+                        itemCount: smItems.length),
+                  ),
+                ],
+              );
             } else if (snapshot.hasError) {
               print(snapshot.error);
               return Center(
@@ -49,6 +59,13 @@ class _StudyMaterialsState extends State<StudyMaterials> {
               );
             }
           }),
+    );
+  }
+
+   _adSpace() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: createBannerAd(AdmobBannerSize.BANNER),
     );
   }
 

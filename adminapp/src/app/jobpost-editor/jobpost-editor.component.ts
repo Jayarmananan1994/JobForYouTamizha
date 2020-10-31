@@ -39,7 +39,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
   jobType: string = 'govt';
   lastDate: Date = null;
   coverImage: File = null;
-  createdDate:  firebase.firestore.Timestamp;
+  createdDate: firebase.firestore.Timestamp;
 
   tags: string[] = [];
   categorySelected: Category;
@@ -137,6 +137,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
 
 
     var createdDate = (this.jobPost == undefined || this.jobPost == null) ? new Date() : this.createFirebaseTimestamp(this.jobPost.createdDate);
+    //var lastDate = (this.jobPost == undefined || this.jobPost == null) ? new Date() : this.createFirebaseTimestamp(this.jobPost.createdDate);
     let jobPost: JobPost = this.createJobPost(jobPostId, attachmentsUploaded, coverImageToUpload, createdDate, this.lastDate, tags);
     console.log(jobPost);
     if (jobPost.id != null) {
@@ -156,10 +157,16 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
 
   }
 
-  createFirebaseTimestamp(createdDate){
-    let timp =  new firebase.firestore.Timestamp(createdDate.seconds, createdDate.nanoseconds);
+  createFirebaseTimestamp(createdDate) {
+    let timp = new firebase.firestore.Timestamp(createdDate.seconds, createdDate.nanoseconds);
     console.log(timp);
     return timp;
+  }
+
+  firebaseTimeStampToDate(timeStamp) {
+    console.log(timeStamp)
+    let timp = new firebase.firestore.Timestamp(timeStamp.seconds, timeStamp.nanoseconds);
+    return timp.toDate();
   }
 
   initiateAllFields() {
@@ -168,6 +175,7 @@ export class JobpostEditorComponent implements OnInit, OnDestroy {
       this.description = this.jobPost.description;
       this.jobContent = this.jobPost.content;
       this.tags = this.jobPost.tags;
+      this.lastDate = (this.jobPost.lastDate === null) ? null : this.firebaseTimeStampToDate(this.jobPost.lastDate);
       this.jobType = this.tags.includes('Government Jobs') ? 'govt' : 'pvt'
     } else {
       console.log("Field is empty")

@@ -14,8 +14,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("asssa")
+    const currentUrl = location.href;
     let sessionStart = sessionStorage.getItem("sessionstart");
-    if(sessionStart==="false" || sessionStart==null) {
+    if((sessionStart==="false" || sessionStart==null) && !currentUrl.endsWith('/privacy')) {
       this.router.navigate(['login'])
     }
   }

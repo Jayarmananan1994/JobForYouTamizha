@@ -22,7 +22,7 @@ class JobForYouTamizha extends StatelessWidget {
   Widget build(BuildContext context) {
     precacheImage(AssetImage(LOGO_IMAGE_PATH), context);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Job for you tamizha',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

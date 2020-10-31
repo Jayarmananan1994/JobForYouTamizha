@@ -31,6 +31,7 @@ import { CategoriesComponent } from './categories/categories.component';
 import { StudymaterialComponent } from './studymaterial/studymaterial.component';
 import { ConfirmDialog } from './dialog/ConfirmDialog';
 import { LoginComponent } from './login/login.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { LoginComponent } from './login/login.component';
     ConfirmDialog,
     CategoriesComponent,
     StudymaterialComponent,
-    LoginComponent
+    LoginComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,8 @@ import { LoginComponent } from './login/login.component';
       { path: 'editpost', component: EditJobpostComponent},
       { path: 'categories', component: CategoriesComponent},
       {path: 'study-materials', component: StudymaterialComponent},
-      { path: 'login', component: LoginComponent}
+      { path: 'login', component: LoginComponent},
+      { path: 'privacy', component: PrivacyPolicyComponent}
     ]),
     BrowserAnimationsModule,
     InfiniteScrollModule

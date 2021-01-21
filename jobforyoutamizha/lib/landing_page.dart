@@ -36,7 +36,6 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     initializeTabViews();
     if (!signinAttempted) {
-      print(">>>>>>> signinin in silenlty>>>>>>>>>>");
       signinAttempted = true;
       _googleSignIn
           .signInSilently(suppressErrors: false)
@@ -58,7 +57,7 @@ class _LandingPageState extends State<LandingPage> {
             .map((e) => BottomNavigationBarItem(
                   icon: Icon(e.icon),
                   backgroundColor: Colors.blue,
-                  title: new Text(e.menuName),
+                  label: e.menuName,
                 ))
             .toList(),
       ),

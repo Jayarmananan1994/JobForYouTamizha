@@ -3,7 +3,6 @@ import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/service/user_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/profile/admin_chat_list.dart';
-import 'package:jobforyoutamizha/tabs/profile/membership.dart';
 import 'package:jobforyoutamizha/tabs/profile/privacy_policy.dart';
 import 'package:jobforyoutamizha/tabs/profile/signin.dart';
 import 'package:launch_review/launch_review.dart';

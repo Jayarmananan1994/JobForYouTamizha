@@ -2,10 +2,8 @@ import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jobforyoutamizha/model/category.dart';
 
-
 class JobInfoService {
   FirebaseFirestore _firestore;
-  List<JobPost> _jobposts;
   List<JobPost> _closingJobs;
   List<Category> _categoryList;
   Map<String, List<JobPost>> _categoryJobs = {};
@@ -17,7 +15,7 @@ class JobInfoService {
   //   }
   //   var snapShot = await getFirestore().collection('jobposts').getDocuments();
   //   List documents = snapShot.documents;
-    
+
   //   _jobposts = documents.map((e) => JobPost.fromSnapshotData(e)).toList();
   //   return _jobposts;
   // }
@@ -30,7 +28,7 @@ class JobInfoService {
     var snapShot = await getFirestore()
         .collection('jobposts')
         .where('lastDate',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()) )
+            isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()))
         .orderBy('lastDate', descending: false)
         .get();
     List documents = snapShot.docs;
@@ -55,15 +53,16 @@ class JobInfoService {
     return _categoryJobs[categoryTag];
   }
 
-  Future<List<JobPost>> getNextJobPostByCategory(String categoryTag, DocumentSnapshot lastEle) async{
-       var snapShot = await getFirestore()
-        .collection('jobposts')
-        .where("tags", arrayContains: categoryTag)
-        .orderBy('createdDate',  descending: true)
-        .startAfterDocument(lastEle)
-        .limit(10)
-        .get();
-     List documents = snapShot.docs;
+  Future<List<JobPost>> getNextJobPostByCategory(
+      String categoryTag, DocumentSnapshot lastEle) async {
+      var snapShot = await getFirestore()
+          .collection('jobposts')
+          .where("tags", arrayContains: categoryTag)
+          .orderBy('createdDate', descending: true)
+          .startAfterDocument(lastEle)
+          .limit(10)
+          .get();
+      List documents = snapShot.docs;
       return documents.map((e) => JobPost.fromSnapshotData(e)).toList();
   }
 
@@ -81,33 +80,39 @@ class JobInfoService {
 
   Future<List<Attachment>> getStudyMaterialsList() async {
     if (_studyMaterialList == null) {
-      var snapshot =
-          await getFirestore().collection('studymaterial').get();
+      var snapshot = await getFirestore().collection('studymaterial').get();
       List<DocumentSnapshot> documents = snapshot.docs;
       print('At service>>>>>>>>>.' + documents.length.toString());
-      _studyMaterialList = documents
-          .map((e) => Attachment.fromMap(e.data()))
-          .toList();
+      _studyMaterialList =
+          documents.map((e) => Attachment.fromMap(e.data())).toList();
     }
     return _studyMaterialList;
   }
 
-  Future<List<JobPost>> searchJobPost(List<String> searchText) async{
-     print(searchText.toString());
-       var snapShot = await getFirestore()
+  Future<List<JobPost>> searchJobPost(List<String> searchText) async {
+    print(searchText.toString());
+    var snapShot = await getFirestore()
         .collection('jobposts')
         .where("searchTexts", arrayContainsAny: searchText)
-        
+
         //.orderBy('createdDate',  descending: true)
         .get();
-     List documents = snapShot.docs;
-     print(documents.toString());
-      return documents.map((e) => JobPost.fromSnapshotData(e)).toList();
+    List documents = snapShot.docs;
+    print(documents.toString());
+    return documents.map((e) => JobPost.fromSnapshotData(e)).toList();
   }
-
 
   FirebaseFirestore getFirestore() {
     if (_firestore == null) _firestore = FirebaseFirestore.instance;
     return _firestore;
   }
+
+  // List<JobPost> findTenJobPostAfterRef(
+  //     DocumentSnapshot lastEle, String categoryTag) {
+  //   int pos = _categoryJobs[categoryTag]
+  //       .indexWhere((element) => element.ref == lastEle);
+  //   return (pos == _categoryJobs[categoryTag].length)
+  //       ? []
+  //       : _categoryJobs[categoryTag].sublist(pos + 1, 10);
+  // }
 }

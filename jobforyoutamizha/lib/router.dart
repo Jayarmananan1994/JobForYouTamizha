@@ -8,7 +8,6 @@ import 'package:jobforyoutamizha/tabs/chat_room/user_chat.dart';
 import 'package:jobforyoutamizha/tabs/help/help.dart';
 import 'package:jobforyoutamizha/tabs/home/job_detail.dart';
 import 'package:jobforyoutamizha/tabs/profile/admin_chat_list.dart';
-import 'package:jobforyoutamizha/tabs/profile/membership.dart';
 import 'package:jobforyoutamizha/tabs/profile/privacy_policy.dart';
 import 'package:jobforyoutamizha/tabs/profile/signin.dart';
 import 'package:jobforyoutamizha/tabs/search_result/search_result.dart';
@@ -39,8 +38,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => PrivacyPolicy());
     case Signin.PATH:
       return MaterialPageRoute(builder: (context) => Signin());
-    case MemberShip.PATH:
-      return MaterialPageRoute(builder: (context) => MemberShip());
     case Help.PATH:
       return MaterialPageRoute(builder: (context) => Help());
     case AdminChatList.PATH:

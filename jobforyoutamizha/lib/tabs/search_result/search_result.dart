@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
@@ -23,17 +22,6 @@ class _SearchResultState extends State<SearchResult> {
     // _initAdMob();
     super.initState();
   }
-
-  // Future<void> _initAdMob() async {
-  //   await FirebaseAdMob.instance.initialize(appId: adMobAppId);
-  //   _bannerAd = createBannerAd(AdSize.banner)..load()..show();
-  // }
-
-  // @override
-  // void dispose() {
-  //   _bannerAd.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

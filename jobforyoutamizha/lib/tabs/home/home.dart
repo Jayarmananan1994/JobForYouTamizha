@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:jobforyoutamizha/adManager.dart';
-import 'package:jobforyoutamizha/common/constant.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
 import 'package:jobforyoutamizha/model/category.dart';
+import 'package:jobforyoutamizha/model/nativeAd_item.dart';
+import 'package:jobforyoutamizha/service/app_config_service.dart';
 import 'package:jobforyoutamizha/service/job_info_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/categories/category_result.dart';
 import 'package:jobforyoutamizha/tabs/home/job_list.dart';
 import 'package:jobforyoutamizha/tabs/search_result/search_result.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 //import 'package:firebase_admob/firebase_admob.dart';
 
 class Home extends StatefulWidget {
@@ -24,15 +23,11 @@ class _HomeState extends State<Home> {
   List<JobPost> _jobPostToShow = [];
   ScrollController _scrollController = new ScrollController();
   JobInfoService _jobInfoService = locator<JobInfoService>();
+  AppInfoService _appInfoService = locator<AppInfoService>();
   bool _nomoreItems = false;
-  // BannerAd _bannerAd;
-  // InterstitialAd interstitialAd;
-  // static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(keywords: ["job","vacancy"]);
 
   @override
   void initState() {
-    //_initAdMob();
-    //interstitialAd = createInterstitialAd()..load()..show();
     super.initState();
     _controller = TextEditingController();
     _scrollController.addListener(() {
@@ -52,7 +47,7 @@ class _HomeState extends State<Home> {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         children: <Widget>[
-          _adSpace(),
+          // _adSpace(),
           _searchBar(),
           _tnebUpdate(),
           _filterButtons(),
@@ -141,6 +136,7 @@ class _HomeState extends State<Home> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _jobPostToShow = snapshot.data;
+            addNativeAdAtRegularInterval();
             return Expanded(
                 child: JobList(
                     jobPostToShow: _jobPostToShow,
@@ -158,13 +154,9 @@ class _HomeState extends State<Home> {
   }
 
   void _loadMorePost() async {
-    var lastDoc = _jobPostToShow.last;
-    print(lastDoc.jobTitle);
-    print(">>> start fetching");
+    JobPost lastDoc = _jobPostToShow.last;
     List<JobPost> post = await _jobInfoService.getNextJobPostByCategory(
         _tabSelected, lastDoc.ref);
-    print(">>>> got some post");
-    print(post);
     if (post.length == 0) {
       setState(() => _nomoreItems = true);
     } else {
@@ -197,11 +189,21 @@ class _HomeState extends State<Home> {
     Navigator.of(context).pushNamed(CategoryResult.PATH, arguments: category);
   }
 
-  _adSpace() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20.0),
-      child: createBannerAd(AdmobBannerSize.BANNER),
-    );
+  void addNativeAdAtRegularInterval() {
+    int interval = (_appInfoService.nativeAdInterval() != null)
+        ? _appInfoService.nativeAdInterval()
+        : 3;
+    for (int i = interval; i <= _jobPostToShow.length; i = (i + interval+1)) {
+      bool exceedLength = i >= _jobPostToShow.length;
+      if (!exceedLength && !nativeAdExistAt(i)) {
+        _jobPostToShow.insert(
+            i, NativeAdItem("", "", "", "", "", "", [], [], null));
+      }
+    }
+  }
+
+  bool nativeAdExistAt(int i) {
+    return _jobPostToShow.elementAt(i).isNativeAd();
   }
 
   // Future<void> _initAdMob() {

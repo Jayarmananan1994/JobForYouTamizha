@@ -1,14 +1,14 @@
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/common/constant.dart';
 import 'package:jobforyoutamizha/model/JobPost.dart';
-import 'package:jobforyoutamizha/service/user_info_service.dart';
+import 'package:jobforyoutamizha/service/app_config_service.dart';
 import 'package:jobforyoutamizha/service_locator.dart';
 import 'package:jobforyoutamizha/tabs/study_materials/open_file.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:admob_flutter/admob_flutter.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 
 class JobDetail extends StatefulWidget {
   final JobPost jobPost;
@@ -23,7 +23,7 @@ class _JobDetailState extends State<JobDetail> {
   // BannerAd _bannerAd;
   InterstitialAd _interstitialAd;
   BuildContext _context;
-  UserInfoService _userInfoService = locator<UserInfoService>();
+  AppInfoService _appInfoService = locator<AppInfoService>();
 
   @override
   void initState() {
@@ -32,13 +32,10 @@ class _JobDetailState extends State<JobDetail> {
   }
 
   Future<void> _initAdMob() async {
-    _userInfoService.incrementDetailPageVisitCount();
-    if (_userInfoService.getDetailpageVisitCount() == 10) {
-      print('>>>>>>>>>>>>>>>>>Load banner ad<<<<<<<<<<<<<<<<<<<<<<');
+    if (_appInfoService.canShowInterratialAd()) {
       _interstitialAd = createInterstitialAd()
         ..load()
-       ..show();
-      _userInfoService.resetDetailPageVisitCount();
+        ..show();
     }
   }
 
@@ -59,6 +56,7 @@ class _JobDetailState extends State<JobDetail> {
         padding: EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
+            _adSpace(),
             _jobImage(MediaQuery.of(context).size.width),
             SizedBox(height: 20),
             _jobInfo(MediaQuery.of(context).size.width)
@@ -139,14 +137,21 @@ class _JobDetailState extends State<JobDetail> {
             (widget.jobPost.attachments.length > 0)
                 ? _attachmentList()
                 : Container(child: Text('No attachments')),
-             _adSpace(),
+            _nativeAdSpace(),
           ],
         ),
       ),
     );
   }
 
-   _adSpace() {
+  _nativeAdSpace() {
+     return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: createNativeAd(),
+    );
+  }
+
+  _adSpace() {
     return Container(
       margin: EdgeInsets.only(bottom: 20.0),
       child: createBannerAd(AdmobBannerSize.BANNER),

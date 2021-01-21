@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:jobforyoutamizha/adManager.dart';
 import 'package:jobforyoutamizha/landing_page.dart';
 import 'package:jobforyoutamizha/model/JFTUser.dart';
 import 'package:jobforyoutamizha/service/user_info_service.dart';
@@ -24,19 +23,6 @@ class _SigninState extends State<Signin> {
     //_initAdMob();
     super.initState();
   }
-
-  // Future<void> _initAdMob() async {
-  //  await FirebaseAdMob.instance.initialize(appId: adMobAppId);
-  //   _bannerAd = createBannerAd(AdSize.banner)
-  //     ..load()
-  //     ..show();
-  // }
-
-  // @override
-  // void dispose() {
-  //   _bannerAd.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

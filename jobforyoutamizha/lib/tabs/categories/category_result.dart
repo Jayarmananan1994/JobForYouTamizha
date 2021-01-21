@@ -37,13 +37,6 @@ class _CategoryResultState extends State<CategoryResult> {
     });
   }
 
-  // Future<void> _initAdMob() async {
-  //   await FirebaseAdMob.instance.initialize(appId: adMobAppId);
-  //   _bannerAd = createBannerAd(AdSize.banner)
-  //     ..load()
-  //     ..show();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
